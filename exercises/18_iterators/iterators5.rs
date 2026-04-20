@@ -28,6 +28,18 @@ fn count_for(map: &HashMap<String, Progress>, value: Progress) -> usize {
 fn count_iterator(map: &HashMap<String, Progress>, value: Progress) -> usize {
     // `map` is a hash map with `String` keys and `Progress` values.
     // map = { "variables1": Complete, "from_str": None, … }
+    let count = map.values().filter(|&v| v == &value).count();
+
+//     map.into_iter().map(|x| {if *x.1 == value{
+//      count + 1
+
+//    }});
+   
+   
+  
+count
+   
+
 }
 
 fn count_collection_for(collection: &[HashMap<String, Progress>], value: Progress) -> usize {
@@ -48,10 +60,33 @@ fn count_collection_iterator(collection: &[HashMap<String, Progress>], value: Pr
     // `collection` is a slice of hash maps.
     // collection = [{ "variables1": Complete, "from_str": None, … },
     //               { "variables2": Complete, … }, … ]
+//    let count = collection.to_vec().into_iter().values().filter(|&v| v == &value).count();
+collection
+        .iter()
+        .flat_map(|map| map.values())
+        .filter(|&v| v == &value)
+        .count()
+
 }
 
 fn main() {
     // You can optionally experiment here.
+     fn get_map() -> HashMap<String, Progress> {
+        use Progress::*;
+
+        let mut map = HashMap::new();
+        map.insert(String::from("variables1"), Complete);
+        map.insert(String::from("functions1"), Complete);
+        map.insert(String::from("hashmap1"), Complete);
+        map.insert(String::from("arc1"), Some);
+        map.insert(String::from("as_ref_mut"), None);
+        map.insert(String::from("from_str"), None);
+
+        map
+    };
+    let map = get_map();
+   let count =  count_iterator(&map, Progress::Complete);
+   print!("{:?}" ,count)
 }
 
 #[cfg(test)]
